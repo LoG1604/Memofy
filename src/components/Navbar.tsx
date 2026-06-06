@@ -33,8 +33,8 @@ export default function Navbar() {
         {/* Logo */}
         <div className="flex items-center gap-2">
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-violet-600 to-indigo-600 text-white shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-200">
-              <Sparkles className="w-5 h-5" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl overflow-hidden group-hover:scale-105 transition-transform duration-200">
+              <img src="/logo.png" alt="Memofy" className="w-full h-full object-cover" />
             </div>
             <span className="text-xl font-bold bg-gradient-to-r from-zinc-100 to-zinc-400 bg-clip-text text-transparent group-hover:text-white transition-colors duration-200">
               Memofy
