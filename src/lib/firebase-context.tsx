@@ -100,9 +100,9 @@ export const FirebaseProvider: React.FC<{ children: React.ReactNode }> = ({
         setIsDemoMode(!configured);
 
         if (configured && auth) {
-            const { getRedirectResult } = require("firebase/auth");
-            getRedirectResult(auth).catch(console.error);
-
+            import("firebase/auth").then(({ getRedirectResult }) => {
+                if (auth) getRedirectResult(auth).catch(console.error);
+            });
             const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
                 if (firebaseUser) {
                     setUser({
@@ -125,7 +125,6 @@ export const FirebaseProvider: React.FC<{ children: React.ReactNode }> = ({
             return unsubscribe;
         }
     }, []);
-
     // ---------------------------------------------------------------------------
     // Auth
     // ---------------------------------------------------------------------------
