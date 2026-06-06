@@ -100,6 +100,9 @@ export const FirebaseProvider: React.FC<{ children: React.ReactNode }> = ({
         setIsDemoMode(!configured);
 
         if (configured && auth) {
+            const { getRedirectResult } = require("firebase/auth");
+            getRedirectResult(auth).catch(console.error);
+
             const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
                 if (firebaseUser) {
                     setUser({
@@ -130,7 +133,9 @@ export const FirebaseProvider: React.FC<{ children: React.ReactNode }> = ({
     const signInWithGoogle = async () => {
         if (!isDemoMode && auth) {
             const provider = new GoogleAuthProvider();
-            await signInWithPopup(auth, provider);
+            const { signInWithRedirect, getRedirectResult } = await import("firebase/auth");
+            await signInWithRedirect(auth, provider);
+
         } else {
             await mockAuth.signInWithGoogle();
         }
