@@ -132,9 +132,18 @@ export const FirebaseProvider: React.FC<{ children: React.ReactNode }> = ({
     const signInWithGoogle = async () => {
         if (!isDemoMode && auth) {
             const provider = new GoogleAuthProvider();
-            const { signInWithRedirect, getRedirectResult } = await import("firebase/auth");
-            await signInWithRedirect(auth, provider);
-
+            provider.setCustomParameters({ prompt: "select_account" });
+            try {
+                const { signInWithPopup } = await import("firebase/auth");
+                await signInWithPopup(auth, provider);
+            } catch (error: any) {
+                if (error.code === "auth/popup-blocked") {
+                    const { signInWithRedirect } = await import("firebase/auth");
+                    await signInWithRedirect(auth, provider);
+                } else {
+                    throw error;
+                }
+            }
         } else {
             await mockAuth.signInWithGoogle();
         }
