@@ -130,14 +130,13 @@ export const FirebaseProvider: React.FC<{ children: React.ReactNode }> = ({
     // ---------------------------------------------------------------------------
 
     const signInWithGoogle = async () => {
-        if (!isDemoMode && auth) {
+        if (isFirebaseConfigured() && auth) {
             const provider = new GoogleAuthProvider();
             provider.setCustomParameters({ prompt: "select_account" });
             try {
-                const { signInWithPopup } = await import("firebase/auth");
                 await signInWithPopup(auth, provider);
             } catch (error: any) {
-                if (error.code === "auth/popup-blocked") {
+                if (error.code === "auth/popup-blocked" || error.code === "auth/cancelled-popup-request") {
                     const { signInWithRedirect } = await import("firebase/auth");
                     await signInWithRedirect(auth, provider);
                 } else {
@@ -148,9 +147,8 @@ export const FirebaseProvider: React.FC<{ children: React.ReactNode }> = ({
             await mockAuth.signInWithGoogle();
         }
     };
-
     const signOutUser = async () => {
-        if (!isDemoMode && auth) {
+        if (isFirebaseConfigured() && auth) {
             await firebaseSignOut(auth);
         } else {
             await mockAuth.signOut();
