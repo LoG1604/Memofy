@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, browserLocalPersistence, setPersistence } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -25,6 +25,11 @@ const app =
     : null;
 
 export const auth = app ? getAuth(app) : null;
+
+if (auth) {
+  setPersistence(auth, browserLocalPersistence).catch(console.error);
+}
+
 export const db = null;
 export const storage = null;
 export default app;
